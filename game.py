@@ -1,3 +1,8 @@
+import logging
+
+logging.basicConfig(filename="D:/Users/HP/Desktop/Крестики-нолики/who_won.log", level=logging.DEBUG,
+                    format='%(asctime)s - %(message)s')
+
 board = list(range(1, 10))
 victory = [(1, 2, 3), (4, 5, 6), (7, 8, 9),
            (1, 4, 7), (2, 5, 8), (3, 6, 9),
@@ -45,7 +50,13 @@ def menu():
         print("------------------------------")
 
         if hist == 1:
-            pass
+            history = open("who_won.log", 'r')
+            reading = history.read()
+            history.close()
+            print(reading)
+            exit = int(input("Введите 1, чтобы выйти в меню: "))
+            if exit == 1:
+                menu()
         else:
             clear_hist = int(input("Хотите очистить историю игр? \n"
                                    "1 = Да, 2 = Перейти к началу игры \n"
@@ -61,7 +72,13 @@ def menu():
             print("------------------------------")
 
             if clear_hist == 1:
-                pass
+                file = open("who_won.log", "r+")
+                file.truncate()
+                file.close()
+                print("История игр успешно очищена!")
+                to_menu = int(input("Введите 1, чтобы вернуться в меню: "))
+                if to_menu == 1:
+                    menu()
             else:
                 return menu()
 
@@ -129,13 +146,15 @@ def main():
             winner = win_combination()
             if winner == "X":
                 my_board()
-                print("Победная комбинация", winner, ", " + Player1 + " выиграл!")
+                print("Победная комбинация" + ", игрок " + Player1 + " выиграл!")
+                logging.debug("Победная комбинация" + ", игрок " + Player1 + " выиграл!")
                 global board
                 board = list(range(1, 10))
                 break
             if winner == "O":
                 my_board()
-                print("Победная комбинация", winner, ", " + Player2 + " выиграл!")
+                print("Победная комбинация" + ", игрок " + Player2 + " выиграл!")
+                logging.debug("Победная комбинация" + ", игрок " + Player2 + " выиграл!")
                 board = list(range(1, 10))
                 break
         counter += 1
